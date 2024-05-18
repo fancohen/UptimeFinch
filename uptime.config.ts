@@ -1,13 +1,13 @@
 const pageConfig = {
   // Title for your status page
-  title: "lyc8503's Status Page",
+  title: "Finch's Status Page",
   // Links shown at the header of your status page, could set `highlight` to `true`
   links: [
     { link: 'https://github.com/fancohen', label: 'GitHub' },
     { link: 'https://www.linweifan.com/', label: 'Blog' },
     { link: 'mailto:i@linweifan.com', label: 'Email Me', highlight: true },
   ],
-}
+};
 
 const workerConfig = {
   kvWriteCooldownMinutes: 3,
@@ -116,7 +116,7 @@ const workerConfig = {
 // Below is code for sending Telegram & Bark notification
 // You can safely ignore them
 const escapeMarkdown = (text: string) => {
-  return text.replace(/[_*[\](){}~`>#+\-=|.!\\]/g, '\\$&');
+  return text.replace(/[_*[\](){}~`>#+\-=|.!\\]/g, '\\{{input}}');
 };
 
 async function notify(
@@ -226,4 +226,4 @@ async function sendBarkNotification(env: any, monitor: any, title: string, body:
 }
 
 // Don't forget this, otherwise compilation fails.
-export { pageConfig, workerConfig }
+export { pageConfig, workerConfig };
