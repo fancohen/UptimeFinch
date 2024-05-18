@@ -3,102 +3,127 @@ const pageConfig = {
   title: "lyc8503's Status Page",
   // Links shown at the header of your status page, could set `highlight` to `true`
   links: [
-    { link: 'https://github.com/lyc8503', label: 'GitHub' },
-    { link: 'https://blog.lyc8503.site/', label: 'Blog' },
-    { link: 'mailto:me@lyc8503.site', label: 'Email Me', highlight: true },
+    { link: 'https://github.com/fancohen', label: 'GitHub' },
+    { link: 'https://www.linweifan.com/', label: 'Blog' },
+    { link: 'mailto:i@linweifan.com', label: 'Email Me', highlight: true },
   ],
 }
 
 const workerConfig = {
-  // Write KV at most every 3 minutes unless the status changed.
   kvWriteCooldownMinutes: 3,
-  // Define all your monitors here
   monitors: [
-    // Example HTTP Monitor
     {
-      // `id` should be unique, history will be kept if the `id` remains constant
       id: 'foo_monitor',
-      // `name` is used at status page and callback message
       name: 'My API Monitor',
-      // `method` should be a valid HTTP Method
       method: 'POST',
-      // `target` is a valid URL
       target: 'https://example.com',
-      // [OPTIONAL] `tooltip` is ONLY used at status page to show a tooltip
       tooltip: 'This is a tooltip for this monitor',
-      // [OPTIONAL] `statusPageLink` is ONLY used for clickable link at status page
       statusPageLink: 'https://example.com',
-      // [OPTIONAL] `expectedCodes` is an array of acceptable HTTP response codes, if not specified, default to 2xx
       expectedCodes: [200],
-      // [OPTIONAL] `timeout` in millisecond, if not specified, default to 10000
       timeout: 10000,
-      // [OPTIONAL] headers to be sent
       headers: {
         'User-Agent': 'Uptimeflare',
         Authorization: 'Bearer YOUR_TOKEN_HERE',
       },
-      // [OPTIONAL] body to be sent
       body: 'Hello, world!',
-      // [OPTIONAL] if specified, the response must contains the keyword to be considered as operational.
       responseKeyword: 'success',
-      // [OPTIONAL] if specified, the check will run in your specified region,
-      // refer to docs https://github.com/lyc8503/UptimeFlare/wiki/Geo-specific-checks-setup before setting this value
       checkLocationWorkerRoute: 'https://xxx.example.com',
     },
-    // Example TCP Monitor
     {
       id: 'test_tcp_monitor',
       name: 'Example TCP Monitor',
-      // `method` should be `TCP_PING` for tcp monitors
       method: 'TCP_PING',
-      // `target` should be `host:port` for tcp monitors
       target: '1.2.3.4:22',
       tooltip: 'My production server SSH',
       statusPageLink: 'https://example.com',
       timeout: 5000,
     },
+    {
+      id: 'blog_monitor',
+      name: 'Blog',
+      method: 'GET',
+      target: 'https://www.linweifan.com',
+      expectedCodes: [200],
+      timeout: 10000,
+      tooltip: 'Monitoring Blog',
+      statusPageLink: 'https://www.linweifan.com',
+    },
+    {
+      id: 'nextchat_monitor',
+      name: 'NextChat',
+      method: 'GET',
+      target: 'https://ai.linweifan.com',
+      expectedCodes: [200],
+      timeout: 10000,
+      tooltip: 'Monitoring NextChat',
+      statusPageLink: 'https://ai.linweifan.com',
+    },
+    {
+      id: 'lobe_monitor',
+      name: 'Lobe',
+      method: 'GET',
+      target: 'https://chat.linweifan.com',
+      expectedCodes: [200],
+      timeout: 10000,
+      tooltip: 'Monitoring Lobe',
+      statusPageLink: 'https://chat.linweifan.com',
+    },
+    {
+      id: 'oneapi_monitor',
+      name: 'OneAPI',
+      method: 'GET',
+      target: 'https://api.linweifan.com',
+      expectedCodes: [200],
+      timeout: 10000,
+      tooltip: 'Monitoring OneAPI',
+      statusPageLink: 'https://api.linweifan.com',
+    },
+    {
+      id: 'drive_monitor',
+      name: 'Drive',
+      method: 'GET',
+      target: 'https://drive.linweifan.com',
+      expectedCodes: [200],
+      timeout: 10000,
+      tooltip: 'Monitoring Drive',
+      statusPageLink: 'https://drive.linweifan.com',
+    },
   ],
   callbacks: {
     onStatusChange: async (
-      env: any,
-      monitor: any,
-      isUp: boolean,
-      timeIncidentStart: number,
-      timeNow: number,
-      reason: string
+      env,
+      monitor,
+      isUp,
+      timeIncidentStart,
+      timeNow,
+      reason
     ) => {
-      // This callback will be called when there's a status change for any monitor
-      // Write any Typescript code here
-
-      // By default, this sends Bark and Telegram notification on every status change if you setup Cloudflare env variables correctly.
       await notify(env, monitor, isUp, timeIncidentStart, timeNow, reason)
     },
     onIncident: async (
-      env: any,
-      monitor: any,
-      timeIncidentStart: number,
-      timeNow: number,
-      reason: string
+      env,
+      monitor,
+      timeIncidentStart,
+      timeNow,
+      reason
     ) => {
-      // This callback will be called EVERY 1 MINTUE if there's an on-going incident for any monitor
       // Write any Typescript code here
     },
   },
 }
 
 // Below is code for sending Telegram & Bark notification
-// You can safely ignore them
-const escapeMarkdown = (text: string) => {
-  return text.replace(/[_*[\](){}~`>#+\-=|.!\\]/g, '\\$&');
+const escapeMarkdown = (text) => {
+  return text.replace(/[_*[\](){}~`>#+\-=|.!\\]/g, '\\{{input}}');
 };
 
 async function notify(
-  env: any,
-  monitor: any,
-  isUp: boolean,
-  timeIncidentStart: number,
-  timeNow: number,
-  reason: string,
+  env,
+  monitor,
+  isUp,
+  timeIncidentStart,
+  timeNow,
+  reason,
 ) {
   const dateFormatter = new Intl.DateTimeFormat('en-US', {
     month: 'numeric',
@@ -140,7 +165,7 @@ async function notify(
   }
 }
 
-export async function notifyTelegram(env: any, monitor: any, operational: boolean, text: string) {
+export async function notifyTelegram(env, monitor, operational, text) {
   const chatId = env.SECRET_TELEGRAM_CHAT_ID;
   const apiToken = env.SECRET_TELEGRAM_API_TOKEN;
 
@@ -170,7 +195,7 @@ export async function notifyTelegram(env: any, monitor: any, operational: boolea
   }
 }
 
-async function sendBarkNotification(env: any, monitor: any, title: string, body: string, group: string = '') {
+async function sendBarkNotification(env, monitor, title, body, group = '') {
   const barkServer = env.BARK_SERVER;
   const barkDeviceKey = env.BARK_DEVICE_KEY;
   const barkUrl = `${barkServer}/push`;
@@ -198,5 +223,4 @@ async function sendBarkNotification(env: any, monitor: any, title: string, body:
   }
 }
 
-// Don't forget this, otherwise compilation fails.
 export { pageConfig, workerConfig }
