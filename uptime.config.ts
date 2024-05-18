@@ -38,19 +38,20 @@ const workerConfig = {
       statusPageLink: 'https://example.com',
       timeout: 5000,
     },
+    // 新增的监控项
     {
       id: 'blog_monitor',
-      name: 'Blog',
+      name: 'Blog Monitor',
       method: 'GET',
       target: 'https://www.linweifan.com',
       expectedCodes: [200],
       timeout: 10000,
-      tooltip: 'Monitoring Blog',
+      tooltip: 'Monitoring my blog',
       statusPageLink: 'https://www.linweifan.com',
     },
     {
       id: 'nextchat_monitor',
-      name: 'NextChat',
+      name: 'NextChat Monitor',
       method: 'GET',
       target: 'https://ai.linweifan.com',
       expectedCodes: [200],
@@ -60,7 +61,7 @@ const workerConfig = {
     },
     {
       id: 'lobe_monitor',
-      name: 'Lobe',
+      name: 'Lobe Monitor',
       method: 'GET',
       target: 'https://chat.linweifan.com',
       expectedCodes: [200],
@@ -70,7 +71,7 @@ const workerConfig = {
     },
     {
       id: 'oneapi_monitor',
-      name: 'OneAPI',
+      name: 'OneAPI Monitor',
       method: 'GET',
       target: 'https://api.linweifan.com',
       expectedCodes: [200],
@@ -80,7 +81,7 @@ const workerConfig = {
     },
     {
       id: 'drive_monitor',
-      name: 'Drive',
+      name: 'Drive Monitor',
       method: 'GET',
       target: 'https://drive.linweifan.com',
       expectedCodes: [200],
@@ -98,7 +99,7 @@ const workerConfig = {
       timeNow,
       reason
     ) => {
-      await notify(env, monitor, isUp, timeIncidentStart, timeNow, reason)
+      await notify(env, monitor, isUp, timeIncidentStart, timeNow, reason);
     },
     onIncident: async (
       env,
@@ -110,20 +111,21 @@ const workerConfig = {
       // Write any Typescript code here
     },
   },
-}
+};
 
 // Below is code for sending Telegram & Bark notification
-const escapeMarkdown = (text) => {
-  return text.replace(/[_*[\](){}~`>#+\-=|.!\\]/g, '\\{{input}}');
+// You can safely ignore them
+const escapeMarkdown = (text: string) => {
+  return text.replace(/[_*[\](){}~`>#+\-=|.!\\]/g, '\\$&');
 };
 
 async function notify(
-  env,
-  monitor,
-  isUp,
-  timeIncidentStart,
-  timeNow,
-  reason,
+  env: any,
+  monitor: any,
+  isUp: boolean,
+  timeIncidentStart: number,
+  timeNow: number,
+  reason: string,
 ) {
   const dateFormatter = new Intl.DateTimeFormat('en-US', {
     month: 'numeric',
@@ -165,7 +167,7 @@ async function notify(
   }
 }
 
-export async function notifyTelegram(env, monitor, operational, text) {
+export async function notifyTelegram(env: any, monitor: any, operational: boolean, text: string) {
   const chatId = env.SECRET_TELEGRAM_CHAT_ID;
   const apiToken = env.SECRET_TELEGRAM_API_TOKEN;
 
@@ -195,7 +197,7 @@ export async function notifyTelegram(env, monitor, operational, text) {
   }
 }
 
-async function sendBarkNotification(env, monitor, title, body, group = '') {
+async function sendBarkNotification(env: any, monitor: any, title: string, body: string, group: string = '') {
   const barkServer = env.BARK_SERVER;
   const barkDeviceKey = env.BARK_DEVICE_KEY;
   const barkUrl = `${barkServer}/push`;
@@ -223,4 +225,5 @@ async function sendBarkNotification(env, monitor, title, body, group = '') {
   }
 }
 
+// Don't forget this, otherwise compilation fails.
 export { pageConfig, workerConfig }
