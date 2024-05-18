@@ -92,21 +92,21 @@ const workerConfig = {
   ],
   callbacks: {
     onStatusChange: async (
-      env,
-      monitor,
-      isUp,
-      timeIncidentStart,
-      timeNow,
-      reason
+      env: any, // 为参数显式指定 `any` 类型
+      monitor: any,
+      isUp: boolean,
+      timeIncidentStart: number,
+      timeNow: number,
+      reason: string
     ) => {
       await notify(env, monitor, isUp, timeIncidentStart, timeNow, reason);
     },
     onIncident: async (
-      env,
-      monitor,
-      timeIncidentStart,
-      timeNow,
-      reason
+      env: any, // 为参数显式指定 `any` 类型
+      monitor: any,
+      timeIncidentStart: number,
+      timeNow: number,
+      reason: string
     ) => {
       // Write any Typescript code here
     },
