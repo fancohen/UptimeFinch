@@ -13,33 +13,6 @@ const workerConfig = {
   kvWriteCooldownMinutes: 3,
   monitors: [
     {
-      id: 'foo_monitor',
-      name: 'My API Monitor',
-      method: 'POST',
-      target: 'https://example.com',
-      tooltip: 'This is a tooltip for this monitor',
-      statusPageLink: 'https://example.com',
-      expectedCodes: [200],
-      timeout: 10000,
-      headers: {
-        'User-Agent': 'Uptimeflare',
-        Authorization: 'Bearer YOUR_TOKEN_HERE',
-      },
-      body: 'Hello, world!',
-      responseKeyword: 'success',
-      checkLocationWorkerRoute: 'https://xxx.example.com',
-    },
-    {
-      id: 'test_tcp_monitor',
-      name: 'Example TCP Monitor',
-      method: 'TCP_PING',
-      target: '1.2.3.4:22',
-      tooltip: 'My production server SSH',
-      statusPageLink: 'https://example.com',
-      timeout: 5000,
-    },
-    // 新增的监控项
-    {
       id: 'blog_monitor',
       name: 'Blog Monitor',
       method: 'GET',
